@@ -1,0 +1,48 @@
+server:
+  port: 81
+spring:
+  application:
+    name: consumer-admin-81
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 119.29.107.247:8848      #服务注册地址
+      config:
+        namespace: public
+  datasource:
+    type : com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://rm-bp1v251nq2rrzvpqcgo.mysql.rds.aliyuncs.com:3306/fwwb?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: xqjuser
+    password: xuqijia123@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  main:
+    allow-bean-definition-overriding: true
+  boot:
+    admin:
+      client:
+        url: http://xstrive.cn:9006
+        instance:
+          prefer-ip: true #使用ip注册进来
+mybatis:
+  #config-location: classpath:mybatis/mybatis-config.xml  #全局配置文件位置，他不一定要
+  mapper-locations: classpath:mapper/*.xml  #sql映射文件位置，在mybatisplus中有默认值，是classpath下mapper文件夹中的所有xml
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true  #开启驼峰命名
+management:
+  endpoints:
+    health:
+      show-details: always
+    web:
+      exposure:
+        include: '*'
+    enabled-by-default: true  #默认开启所有监控断点 true
+feign:
+  client:
+    config:
+      default:
+        #建立连接所用的时间，适用于网络状况正常的情况下，两端连接所需要的时间
+        ConnectTimeOut: 50000
+        #指建立连接后从服务端读取到可用资源所用的时间
+        ReadTimeOut: 50000

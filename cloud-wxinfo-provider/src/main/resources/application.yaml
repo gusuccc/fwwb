@@ -1,0 +1,29 @@
+server:
+  port: 9003
+spring:
+  application:
+    name: wxinfo-provider-xqj
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 119.29.107.247:8848      #服务注册地址
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://rm-bp1v251nq2rrzvpqcgo.mysql.rds.aliyuncs.com:3306/fwwb?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: xqjuser
+    password: xuqijia123@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  #config-location: classpath:mybatis/mybatis-config.xml  #全局配置文件位置，他不一定要
+  mapper-locations: classpath:mapper/*.xml  #sql映射文件位置，在mybatisplus中有默认值，是classpath下mapper文件夹中的所有xml
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true  #开启驼峰命名
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    enabled-by-default: true

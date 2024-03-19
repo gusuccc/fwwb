@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>公告管理</title>
+<link rel="icon" href="../static/images/favicon.ico" type="image/ico">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/materialdesignicons.min.css" rel="stylesheet">
+<link href="js/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+<link href="js/jquery-confirm/jquery-confirm.min.css" rel="stylesheet">
+<link href="css/style.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/layui/css/layui.css">
+<link href="css/materialdesignicons.min.css" rel="stylesheet">
+
+    <style>
+        .content {
+            /*width:200px;*/
+            overflow:hidden;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            -o-text-overflow:ellipsis;
+            -icab-text-overflow: ellipsis;
+            -khtml-text-overflow: ellipsis;
+            -moz-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container-fluid p-t-15" >
+  
+  <div class="row">
+    
+    <div class="col-lg-12">
+      <div class="card">
+        <header class="card-header"><div class="card-title">公告表单</div></header>
+        <div class="card-body">
+          <div id="toolbar" class="toolbar-btn-action">
+            <button id="btn_add" type="button" class="btn btn-primary m-r-5" data-toggle="modal" data-target="#ModalChange">
+              <span class="mdi mdi-plus" aria-hidden="true">新增</span>
+            </button>
+          </div>
+            <!--新增-->
+            <div class="modal fade" id="ModalChange" tabindex="-1" role="dialog" aria-labelledby="exampleModalChangeLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" >新增公告</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#ModalChange">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" th:action="@{/notice/add}"><!--th:action="@{/consumer/update}"-->
+                                <div class="form-row" >
+                                    <div class="form-group col-md-6" style="margin-top: 10px;margin-bottom: 0px;">
+                                        <label>公告标题</label>
+                                        <input name="noticeTitle" type="text" class="form-control" placeholder="请输入公告标题">
+                                    </div>
+                                </div>
+                                <div class="mb-3 was-validated" style="margin-top: 10px">
+                                    <label >文本域</label>
+                                    <textarea name="noticeContent" class="form-control is-invalid" style="height: 200px"  placeholder="必需填写的文本区域" required ></textarea>
+                                </div>
+
+                                <div style="margin-top: 15px">
+                                    <p>备注</p>
+                                    <input name="remark" type="text" class="form-control"  placeholder="填写备注信息" style="margin-top: 10px;">
+                                </div>
+                                <div class="form-row"style="margin-top:20px">
+                                    <div class="col col-md-6">
+                                        <label>状态</label>
+                                        <select name="status"  class="form-control" autocomplete="off">
+                                            <option value="0" selected="selected">正常</option>
+                                            <option value="1">禁用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="submit" class="btn btn-primary">提交</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!--编辑-->
+            <div class="modal fade" id="ModalChange1" tabindex="-1" role="dialog" aria-labelledby="exampleModalChangeLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title" >编辑公告</h6>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#ModalChange1">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" th:action="@{/notice/update}"><!--th:action="@{/consumer/update}"-->
+                                <div class="form-row" >
+                                    <div class="col-md-6" style="margin-top: 10px;margin-bottom: 0px;">
+                                        <label>公告ID</label>
+                                        <input name="noticeId" type="text" class="form-control" placeholder="公告ID" id="id" readonly unselectable="on">
+                                    </div>
+                                    <div class="col-md-6" style="margin-top: 10px;margin-bottom: 0px;">
+                                        <label>创建者</label>
+                                        <input name="createBy" type="text" class="form-control" placeholder="创建者" id="creator" readonly unselectable="on">
+                                    </div>
+                                </div>
+                                <div class="form-row" >
+                                    <div class="form-group col-md-6" style="margin-top: 10px;margin-bottom: 0px;">
+                                    <label  style="margin-top: 10px">公告标题</label>
+                                    <input name="noticeTitle" type="text" class="form-control" placeholder="公告标题" id="title">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 was-validated" style="margin-top: 10px">
+                                    <label for="content">文本域</label>
+                                    <textarea name="noticeContent" class="form-control is-invalid" style="height: 200px" id="content" placeholder="公告内容" required></textarea>
+                                </div>
+
+                                <div style="margin-top: 15px">
+                                    <p>备注</p>
+                                    <input name="remark" id="remarks" type="text" class="form-control"  placeholder="填写备注信息" style="margin-top: 10px;">
+                                </div>
+                                <div class="form-row"style="margin-top:20px">
+                                    <div class="col col-md-6">
+                                        <label>状态</label>
+                                        <select id="status" name="status"  class="form-control" autocomplete="off">
+                                            <option value="0">正常</option>
+                                            <option value="1">禁用</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                                    <button type="submit" class="btn btn-primary">提交</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          <table id="tb_departments" style="table-layout: fixed"><!--style="table-layout: fixed">-->
+           <tr th:each="announce:${noticelists}">
+              <td  ></td><!--是否选中-->
+              <td   th:class="id" th:text="${announce.noticeId}">0</td>
+              <td   th:class="title" th:text="${announce.noticeTitle}">公告示范666666666666</td>
+              <td   th:class="content"  th:text="${announce.noticeContent}">公告内容</td>
+              <td   th:class="creator" th:text="${announce.createBy}">yman</td>
+              <td   th:class="createTime" th:text="${#dates.format(announce.createTime,'yyyy-MM-dd')}">2021-02-18</td>
+              <td   th:class="updater" th:text="${announce.updateBy}">xman</td>
+              <td   th:class="updateTime" th:text="${#dates.format(announce.updateTime,'yyyy-MM-dd')}">2021-02-18</td>
+              <td   th:class="remarks" th:text="${announce.remark}">无</td>
+              <td   th:class="status" th:text="${announce.status}">0</td>
+              <td  style="width:400px"></th>
+           </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/popper.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jquery-confirm/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-table/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-table/locale/bootstrap-table-zh-CN.min-announcement.js"></script>
+<script type="text/javascript" src="js/main.min.js"></script>
+<script type="text/javascript">
+    $('#ModalChange1').on('show.bs.modal', function (event) {
+
+        var button = $(event.relatedTarget);
+        var recipient = button.data('whatever');
+        var modal = $(this);
+        /*获取当行的数据*/
+        var id = button.parent("td").parent("tr").find(".id").text();
+        var title = button.parent("td").parent("tr").find(".title").text();
+        var content = button.parent("td").parent("tr").find(".content").text();
+        var creator = button.parent("td").parent("tr").find(".creator").text();
+        var createTime = button.parent("td").parent("tr").find(".createTime").text();
+        var updater = button.parent("td").parent("tr").find(".updater").text();
+        var updateTime = button.parent("td").parent("tr").find(".updateTime").text();
+        var status = button.parent("td").parent("tr").find(".status").text();
+        var remarks = button.parent("td").parent("tr").find(".remarks").text();
+
+
+        modal.find('.modal-title').text('编辑客户信息');
+
+        modal.find('.modal-body #id').val(id);
+        modal.find('.modal-body #title').val(title);
+        modal.find('.modal-body #content').val(content);
+        modal.find('.modal-body #creator').val(creator);
+        modal.find('.modal-body #createTime').val(createTime);
+        modal.find('.modal-body #updater').val(updater);
+        modal.find('.modal-body #updateTime').val(updateTime);
+        modal.find('.modal-body #remarks').val(remarks);
+
+
+        $("#status").find("option[text=status]").attr("selected",true);
+
+    })
+$('#tb_departments').bootstrapTable({
+    classes: 'table table-bordered table-hover table-striped',
+    //url: 'http://www.bixiaguangnian.com/index/test/getExampleJson',
+    method: 'get',
+    dataType : 'jsonp',        // 因为本示例中是跨域的调用,所以涉及到ajax都采用jsonp,
+    uniqueId: 'id',
+    idField: 'id',             // 每行的唯一标识字段
+    toolbar: '#toolbar',       // 工具按钮容器
+    clickToSelect: false,     // 是否启用点击选中行
+    showColumns: true,         // 是否显示所有的列
+    //showRefresh: true,         // 是否显示刷新按钮
+    
+    showToggle: true,        // 是否显示详细视图和列表视图的切换按钮(clickToSelect同时设置为true时点击会报错)
+  
+    pagination: true,                    // 是否显示分页
+    sortOrder: "asc",                    // 排序方式
+    queryParams: function(params) {
+        var temp = {
+            limit: params.limit,         // 每页数据量
+            offset: params.offset,       // sql语句起始索引
+            page: (params.offset / params.limit) + 1,
+            sort: params.sort,           // 排序的列名
+            sortOrder: params.order      // 排序方式'asc' 'desc'
+        };
+        return temp;
+    },                                   // 传递参数
+    sidePagination: "client",            // 分页方式：client客户端分页，server服务端分页
+    pageNumber: 1,                       // 初始化加载第一页，默认第一页
+    pageSize: 10,                        // 每页的记录行数
+    pageList: [10, 25, 50, 100],         // 可供选择的每页的行数
+    search: true,                      // 是否显示表格搜索，此搜索是客户端搜索
+    
+   // showExport: true,        // 是否显示导出按钮, 导出功能需要导出插件支持(tableexport.min.js)
+    //exportDataType: "basic", // 导出数据类型, 'basic':当前页, 'all':所有数据, 'selected':选中的数据
+  
+    columns: [{
+        field: 'example',
+        checkbox: true,    // 是否显示复选框
+    }, {
+        field: 'notice_id',
+        title: '公告ID',
+        sortable: true    // 是否排序
+    }, {
+        field: 'notice_title',
+        title: '公告标题'
+    }, {
+        field: 'notice_content',
+        title: '公告内容',
+    }, {
+        field: 'create_by',
+        title: '创建者'
+    }, {
+        field: 'create_time',
+        title: '创建时间'
+    }, {
+        field: 'update_by',
+        title: '更新者'
+    }, {
+        field: 'uodate_time',
+        title: '更新时间'
+    },{
+        field: 'remark',
+        title: '备注'
+    }, {
+        field: 'status',
+        title: '状态',
+        formatter:function(value, row, index){ 
+			var value="";
+			if (row.status == '1') {
+				value = '<span class="badge badge-danger">禁用</span>';
+			} else if(row.status == '0') {
+				value = '<span class="badge badge-success">正常</span>';
+			}else {
+				value = row.pType ;
+			}
+			return value;
+		}
+    }, {
+        field: 'operate',
+        title: '操作',
+        formatter: btnGroup,  // 自定义方法
+        events: {
+            'click .edit-btn': function (event, value, row, index) {
+               // editUser(row);
+            },
+            'click .del-btn': function (event, value, row, index) {
+                delUser(row);
+            }
+        }
+    }],
+    onLoadSuccess: function(data){
+        $("[data-toggle='tooltip']").tooltip();
+    }
+});
+
+// 操作按钮
+function btnGroup ()
+{
+    let html =
+        '<a href="#!" class="btn btn-xs btn-default m-r-5 edit-btn" title="编辑" data-toggle="modal" data-target="#ModalChange1"><i class="mdi mdi-pencil"></i></a>' +
+        '<a href="#!" class="btn btn-xs btn-default del-btn" title="删除" data-toggle="tooltip"><i class="mdi mdi-window-close"></i></a>'+
+        '<a href="#!" class="btn btn-xs btn-default m-r-5 edit-btn" title="查看" data-toggle="tooltip"><i class="mdi mdi-more"></i></a>'
+    return html;
+}
+
+    function btnDetail (row)
+    {
+        let html =
+            '<a href="#!" class="btn btn-xs btn-default m-r-5 edit-btn" title="查看详情" data-toggle="tooltip"><p>查看详情</p></a>'
+
+        return html;
+    }
+// 操作方法 - 编辑
+function editUser()
+{
+
+}
+// 操作方法 - 删除
+function delUser(row)
+{
+    $.confirm({
+        title: '确认删除公告',
+        content: '是否确认删除？计时结束将自动取消。',
+        autoClose: 'cancelAction|10000',
+        escapeKey: 'cancelAction',
+        buttons: {
+            confirm: {
+                btnClass: 'btn-red',
+                text: '确认删除'+row.notice_title,
+                action: function () {
+                    $.ajax({
+                        url:"/notice/move/"+row.notice_id,
+                        type: 'get',
+                        success:function () {  //data会接受服务器响应的值
+                            console.info("请求成功!");
+                            location.reload(true);      //这是刷新函数
+                        } //响应成功后的回掉函数
+                    });
+                }
+            },
+            cancelAction: {
+                text: '取消',
+                action: function () {
+                    $.alert('公告'+row.notice_title+'刚刚得救了！');
+
+                }
+            }
+        }
+    })
+}
+</script>
+<script type="text/javascript" src="/layui/layui.js"></script>
+<script>
+    //配置插件目录
+    layui.config({
+        base: './mods/'
+        , version: '1.0'
+    });
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'form', 'layarea'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , layarea = layui.layarea;
+
+        let obj1 = layarea.render({
+            elem: '#area-picker',
+            change: function (res) {
+                //选择结果
+                console.log(res);
+            }
+        });
+        layarea.render({
+            elem: '#area-picker2',
+            change: function (res) {
+                //选择结果
+                console.log(res);
+            }
+        });
+        layarea.render({
+            elem: '#area-picker3',
+            change: function (res) {
+                //选择结果
+                console.log(res);
+            }
+        });
+        layarea.render({
+            elem: '#area-picker4',
+            data: {
+                province: "广东省",
+                city: "深圳市",
+                county: "龙岗区",
+            },
+            change: function (res) {
+                //选择结果
+                console.log(res);
+            }
+        });
+        /*
+            //第一个重载
+            setTimeout(() => {
+
+                obj1.reload({
+                    data: {
+                        province: province,
+                        city: city,
+                        county: county,
+                    }
+                });
+                //console.log(ssss);
+                province="";
+                city="";
+                county="";
+                ssss="";
+               //console.log(ssss);
+                }, 3000);*/
+    });
+    $('.detail').on('click', function(event) {
+
+        $.alert({
+            title: '可拖动的对话',
+            content: '此对话框是可拖动的，请使用标题将其拖动。它不会触碰屏幕边框。',
+            type: 'blue',
+            animation: 'scale',
+            draggable: true,
+        });
+    })
+</script>
+</body>
+</html>

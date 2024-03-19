@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: miniprogramm
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 119.29.107.247:8848
+      #  ip: 42.193.144.41
+      config:
+        namespace: public
+  redis:
+    host: r-bp1ee63f2944c764pd.redis.rds.aliyuncs.com
+    port: 6379
+    password: xuqijia123@
+    client-type: jedis
+    jedis:
+      pool:
+        max-active: 10
+  main:
+    allow-bean-definition-overriding: true
+server:
+  port: 80
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+    enabled-by-default: true
+feign:
+  client:
+    config:
+      default:
+        #建立连接所用的时间，适用于网络状况正常的情况下，两端连接所需要的时间
+        ConnectTimeOut: 50000
+        #指建立连接后从服务端读取到可用资源所用的时间
+        ReadTimeOut: 50000

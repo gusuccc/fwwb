@@ -1,0 +1,17 @@
+server:
+  port: 80
+
+
+spring:
+  application:
+    name: consumer-80
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 119.29.107.247:8848      #服务注册地址
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
